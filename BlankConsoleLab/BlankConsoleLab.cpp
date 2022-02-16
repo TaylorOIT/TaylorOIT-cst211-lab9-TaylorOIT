@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include "HashTable.h";
 
 using namespace std;
 
@@ -11,6 +12,6 @@ using std::endl;
 
 int main()
 {
-    cout << "Hello World!\n";
+
 }
 
