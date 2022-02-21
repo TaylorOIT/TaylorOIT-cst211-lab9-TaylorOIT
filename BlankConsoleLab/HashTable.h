@@ -22,13 +22,14 @@ public:
 	HashTable(HashTable<K, V>&& copy); // move constructor
 	HashTable& operator =(const HashTable<K, V>& rhs); // copy assignment
 	HashTable& operator =(HashTable<K, V>&& rhs); // move assignment
+	~HashTable();
 
 	int setHash(K key); // returns the element where the list item will be inserted
 	void Insert(K key, V value); // inserts the object into the bucket
 	V operator [](K key); // returns the value depending on the key (operator array index)
-	void Delete(K key);
+	void Delete(K key); // deletes the list given a key
 	void Traverse(V value);
-	void PrintHashTable();
+	void PrintHashTable(); // prints the entire hash table
 private:
 	list <pair<K, V> > *bucketlist;
 	int BUCKETSIZE;
@@ -41,6 +42,15 @@ inline HashTable<K, V>::HashTable(int value)
 	nxt_incr = 0;
 	this->BUCKETSIZE = value;
 	bucketlist = new list <pair<K, V>>[BUCKETSIZE];
+}
+
+template<typename K, typename V>
+inline HashTable<K, V>::~HashTable()
+{
+	for (int i = 0; i < BUCKETSIZE; i++)
+	{
+		bucketlist[i].clear();
+	}
 }
 
 template<typename K, typename V>
