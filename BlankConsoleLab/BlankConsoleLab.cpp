@@ -34,8 +34,10 @@ bool test_copy_ctor();
 bool test_move_ctor();
 bool test_op_equal();
 bool test_move_op_equal();
+bool insert_test();
 
-FunctionPointer test_functions[] = { test_default_ctor,test_one_param_ctor,test_copy_ctor,test_move_ctor,test_op_equal };
+FunctionPointer test_functions[] = { test_default_ctor,test_one_param_ctor,test_copy_ctor,test_move_ctor,test_op_equal, 
+test_move_op_equal, insert_test };
 
 int main()
 {
@@ -166,6 +168,52 @@ bool test_op_equal()
         pass = false;
 
     cout << "Op Equals Test ";
+    return pass;
+}
+
+bool test_move_op_equal()
+{
+    bool pass = true;
+
+    HashTable<string, Book> object2;
+    object2 = ReturnHashTable();
+
+    Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
+    Book temp1 = { "Rodeo for Dummies", "Calvin Caldwell", 1 };
+    Book temp2 = { "And That n There", "Ralph Carestia", 1 };
+
+    if (object2["0763757233"].m_title != temp.m_title)
+        pass = false;
+
+    if (object2["0763757234"].m_title != temp1.m_title)
+        pass = false;
+
+    if (object2["0763757235"].m_title != temp2.m_title)
+        pass = false;
+
+    cout << "Move Op Equals Test ";
+    return pass;
+}
+
+bool insert_test()
+{
+    bool pass = true;
+
+    HashTable<string, Book> object;
+
+    Book Harry = { "Harry Potter and the Sorcerer's Stone", "J. K. Rowling", 223 };
+    object.Insert("0-7475-3269-9", Harry);
+    
+    if (object["0-7475-3269-9"].m_title != Harry.m_title)
+        pass = false;
+
+    if (object["0-7475-3269-9"].m_author != Harry.m_author)
+        pass = false;
+
+    if (object["0-7475-3269-9"].m_pages != Harry.m_pages)
+        pass = false;
+
+    cout << "Insert Test ";
     return pass;
 }
 
