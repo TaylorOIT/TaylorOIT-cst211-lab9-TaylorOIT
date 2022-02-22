@@ -35,7 +35,7 @@ bool test_move_ctor();
 bool test_op_equal();
 bool test_move_op_equal();
 
-FunctionPointer test_functions[] = { test_default_ctor, test_one_param_ctor, test_copy_ctor };
+FunctionPointer test_functions[] = { test_default_ctor, test_one_param_ctor, test_copy_ctor, test_move_ctor };
 
 int main()
 {
@@ -118,6 +118,28 @@ bool test_copy_ctor()
         pass = false;
 
     cout << "Copy Ctor Test ";
+    return pass;
+}
+
+bool test_move_ctor()
+{
+    bool pass = true;
+    HashTable<string, Book> object(ReturnHashTable());
+
+    Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
+    Book temp1 = { "Rodeo for Dummies", "Calvin Caldwell", 1 };
+    Book temp2 = { "And That n There", "Ralph Carestia", 1 };
+
+    if (object["0763757233"].m_title != temp.m_title)
+        pass = false;
+
+    if (object["0763757234"].m_title != temp1.m_title)
+        pass = false;
+
+    if (object["0763757235"].m_title != temp2.m_title)
+        pass = false;
+
+    cout << "Move Ctor Test ";
     return pass;
 }
 
