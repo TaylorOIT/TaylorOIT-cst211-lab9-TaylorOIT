@@ -22,7 +22,7 @@ public:
 	HashTable(HashTable<K, V>&& copy); // move constructor
 	HashTable& operator =(const HashTable<K, V>& rhs); // copy assignment
 	HashTable& operator =(HashTable<K, V>&& rhs); // move assignment
-	~HashTable();
+	~HashTable(); // destructor
 
 	int setHash(K key); // returns the element where the list item will be inserted
 	void Insert(K key, V value); // inserts the object into the bucket
@@ -34,12 +34,15 @@ private:
 	list <pair<K, V> > *bucketlist;
 	int BUCKETSIZE;
 	int nxt_incr;
+	int capacity;
+	void reHash();
 };
 
 template<typename K, typename V>
 inline HashTable<K, V>::HashTable(int value) 
 {
 	nxt_incr = 0;
+	capacity = 0;
 	this->BUCKETSIZE = value;
 	bucketlist = new list <pair<K, V>>[BUCKETSIZE];
 }
@@ -47,10 +50,10 @@ inline HashTable<K, V>::HashTable(int value)
 template<typename K, typename V>
 inline HashTable<K, V>::~HashTable()
 {
-	for (int i = 0; i < BUCKETSIZE; i++)
-	{
-		bucketlist[i].clear();
-	}
+	delete[] bucketlist;
+	
+	bucketlist = nullptr;
+	BUCKETSIZE = 0;
 }
 
 template<typename K, typename V>
@@ -75,8 +78,10 @@ inline void HashTable<K, V>::Insert(K key, V value)
 	int index = setHash(key);
 
 	pair<K, V> str_object_pair = make_pair(key, value);
-
+	
 	bucketlist[index].push_back(str_object_pair);
+
+	reHash();
 }
 
 template<typename K, typename V>
@@ -108,23 +113,71 @@ inline void HashTable<K, V>::Delete(K key)
 	int index = setHash(key);
 	for (int i = 0; i < BUCKETSIZE; i++) 
 	{
-		if (index == i)
+		if (index == i) {
+			std::cout << "Deleting Element: " << i;
+			for (auto list : bucketlist[i]) {
+				std::cout << " --> " << list.first << ", " << list.second.m_title;
+				--capacity;
+			}
 			bucketlist[i].clear();
+		}
 	}
+	std::cout << std::endl;
 }
 
 template<typename K, typename V>
 inline void HashTable<K, V>::PrintHashTable()
 {
-	std::cout << "\nHash Table:\n";
-	std::cout << "------------------------------------\n";
-	for (int i = 0; i < BUCKETSIZE; i++) {
-		std::cout << i;
-		for (auto list : bucketlist[i])
-			std::cout << " --> " << list.first << ", " << list.second.m_title;
-		std::cout << std::endl;
+	if (BUCKETSIZE > 0) {
+		std::cout << "\nHash Table:\n";
+		std::cout << "------------------------------------\n";
+		for (int i = 0; i < BUCKETSIZE; i++) {
+			std::cout << i;
+			for (auto list : bucketlist[i])
+				std::cout << " --> " << list.first << ", " << list.second.m_title;
+			std::cout << std::endl;
+		}
+		std::cout << "------------------------------------\n\n";
 	}
-	std::cout << "------------------------------------\n\n";
+	else
+		std::cout << "Hash Table is empty.\n";
+}
+
+template<typename K, typename V>
+inline void HashTable<K, V>::reHash()
+{
+	int index = 0;
+	capacity = 0;
+	double load_factor;
+
+	for (int i = 0; i < BUCKETSIZE; i++) 
+	{
+		for (auto list : bucketlist[i]) {
+			++capacity;
+		}
+	}
+	
+	load_factor = (double)capacity / (double)BUCKETSIZE;
+
+	if (load_factor > 0.5) 
+	{
+		list <pair<K, V> >* temp_bkt_list;
+		temp_bkt_list = new list <pair<K, V>>[BUCKETSIZE * 2];
+		
+		for (int i = 0; i < BUCKETSIZE; i++)
+		{
+			for (auto list : bucketlist[i]) {
+				index = setHash(list.first);
+				pair<K, V> str_object_pair = make_pair(list.first, list.second);
+				temp_bkt_list[index].push_back(str_object_pair);
+			}
+		}
+		delete[] bucketlist;
+		bucketlist = temp_bkt_list;
+		BUCKETSIZE = BUCKETSIZE * 2;
+
+		std::cout << "Load Factor is above 0.5. Table size is now: " << BUCKETSIZE << std::endl;
+	}
 }
 
 #endif

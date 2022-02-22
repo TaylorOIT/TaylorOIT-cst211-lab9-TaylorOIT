@@ -1,11 +1,16 @@
 // BlankConsoleLab.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#define _CRTDBG_MAP_ALLOC
+
 #include <iostream>
 #include "HashTable.h"
+#include <crtdbg.h>
 
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	
 	HashTable<string, Book> t(10);
 
 	Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
@@ -16,14 +21,18 @@ int main()
 	t.Insert("0763757233", temp1);
 	t.Insert("0763757234", temp3);
 	t.Insert("0763757234", temp2);
+	t.Insert("0763757235", temp2);
+	t.Insert("0763757236", temp2);
+
 
 	std::cout << t["7063757233"].m_title << std::endl;
 	std::cout << t["7063757233"].m_title << std::endl;
 	std::cout << t["7063757234"].m_title << std::endl;
 	std::cout << t["7063757234"].m_title << std::endl;
 
+
 	t.PrintHashTable();
-	t.Delete("7063757234");
-	t.PrintHashTable();
+
+	return 0;
 }
 
