@@ -29,7 +29,8 @@ public:
 	V operator [](K key); // returns the value depending on the key (operator array index)
 	void Delete(K key); // deletes the list given a key
 	void Purge();
-	void Traverse(V value);
+	void Traverse(V value); // traverses the hashtable to find the object value that matches the input and output title, author,
+							// and pages
 	void PrintHashTable(); // prints the entire hash table
 private:
 	list <pair<K, V> > *bucketlist;
@@ -230,6 +231,17 @@ inline void HashTable<K, V>::Purge()
 	BUCKETSIZE = 0;
 	nxt_incr = 0;
 	capacity = 0;
+}
+
+template<typename K, typename V>
+inline void HashTable<K, V>::Traverse(V value)
+{
+	for (int i = 0; i < BUCKETSIZE; i++) {
+		for (auto list : bucketlist[i])
+			if (value.m_title == list.second.m_title)
+				std::cout << list.second.m_title << ", " << list.second.m_author << ", " << list.second.m_pages << std::endl;
+	}
+	std::cout << std::endl;
 }
 
 template<typename K, typename V>

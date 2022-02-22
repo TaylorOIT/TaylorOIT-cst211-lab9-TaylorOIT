@@ -40,13 +40,7 @@ int main()
 	t.Insert("0763757234", temp2);
 	t.Insert("0763757235", temp2);
 
-	HashTable<string, Book> q(10);
-	q = ReturnHashTable();
-
-
-
-	q.PrintHashTable();
-	t.PrintHashTable();
+	t.Traverse(temp);
 
 	return 0;
 }
