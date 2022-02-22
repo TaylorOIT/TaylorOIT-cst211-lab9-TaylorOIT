@@ -70,7 +70,7 @@ inline HashTable<K, V>::HashTable(int value)
 template<typename K, typename V>
 inline HashTable<K, V>::HashTable(const HashTable<K, V>& copy)
 {
-	if (this != copy) 
+	if (this != &copy) 
 	{
 		int index = 0;
 		nxt_incr = copy.nxt_incr;

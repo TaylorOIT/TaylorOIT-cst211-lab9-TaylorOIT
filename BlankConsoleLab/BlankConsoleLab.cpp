@@ -30,17 +30,12 @@ HashTable<string, Book> ReturnHashTable()
 
 bool test_default_ctor();
 bool test_one_param_ctor();
-bool test_default_ctor_complex();
 bool test_copy_ctor();
-bool test_copy_ctor_complex();
 bool test_move_ctor();
-bool test_move_ctor_complex();
 bool test_op_equal();
-bool test_op_equal_complex();
 bool test_move_op_equal();
-bool test_move_op_equal_complex();
 
-FunctionPointer test_functions[] = { test_default_ctor, test_one_param_ctor };
+FunctionPointer test_functions[] = { test_default_ctor, test_one_param_ctor, test_copy_ctor };
 
 int main()
 {
@@ -98,6 +93,31 @@ bool test_one_param_ctor()
         pass = false;
 
     cout << "One Parameter Ctor Test ";
+    return pass;
+}
+
+bool test_copy_ctor()
+{
+    bool pass = true;
+    HashTable<string, Book> object(10);
+
+    Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
+
+    object.Insert("0763757233", temp);
+
+    
+    HashTable<string, Book> object2(object);
+
+    if (object["0763757233"].m_title != object2["0763757233"].m_title)
+        pass = false;
+
+    if (object["0763757233"].m_author != object2["0763757233"].m_author)
+        pass = false;
+
+    if (object["0763757233"].m_pages != object2["0763757233"].m_pages)
+        pass = false;
+
+    cout << "Copy Ctor Test ";
     return pass;
 }
 
