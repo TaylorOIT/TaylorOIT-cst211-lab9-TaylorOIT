@@ -121,6 +121,32 @@ inline HashTable<K, V>& HashTable<K, V>::operator=(const HashTable<K, V>& rhs)
 }
 
 template<typename K, typename V>
+inline HashTable<K, V>& HashTable<K, V>::operator=(HashTable<K, V>&& rhs)
+{
+	if (this != &rhs)
+	{
+		int index = 0;
+		nxt_incr = rhs.nxt_incr;
+		capacity = rhs.capacity;
+		BUCKETSIZE = rhs.BUCKETSIZE;
+		bucketlist = new list <pair<K, V>>[BUCKETSIZE];
+
+		for (int i = 0; i < BUCKETSIZE; i++)
+		{
+			for (auto list : rhs.bucketlist[i])
+			{
+				index = setHash(list.first);
+				pair<K, V> str_object_pair = make_pair(list.first, list.second);
+				bucketlist[index].push_back(str_object_pair);
+			}
+		}
+		
+		rhs.Purge();
+	}
+	return *this;
+}
+
+template<typename K, typename V>
 inline HashTable<K, V>::~HashTable()
 {
 	Purge();

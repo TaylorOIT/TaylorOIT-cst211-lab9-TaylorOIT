@@ -41,7 +41,7 @@ int main()
 	t.Insert("0763757235", temp2);
 
 	HashTable<string, Book> q(10);
-	q = t;
+	q = ReturnHashTable();
 
 
 
