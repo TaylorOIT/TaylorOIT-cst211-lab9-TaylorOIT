@@ -28,14 +28,15 @@ public:
 	void Insert(K key, V value); // inserts the object into the bucket
 	V operator [](K key); // returns the value depending on the key (operator array index)
 	void Delete(K key); // deletes the list given a key
+	void Purge();
 	void Traverse(V value);
 	void PrintHashTable(); // prints the entire hash table
 private:
 	list <pair<K, V> > *bucketlist;
-	int BUCKETSIZE;
-	int nxt_incr;
-	int capacity;
-	void reHash();
+	int BUCKETSIZE; // size of the hash table
+	int nxt_incr; // used in the operator array index method.
+	int capacity; // total capacity of the hash table. Used in the reHash function.
+	void reHash(); // resizes the hash table depending if the load factor is equal/above 0.5
 };
 
 template<typename K, typename V>
@@ -48,12 +49,29 @@ inline HashTable<K, V>::HashTable(int value)
 }
 
 template<typename K, typename V>
+inline HashTable<K, V>::HashTable(const HashTable<K, V>& copy)
+{
+	int index = 0;
+	nxt_incr = copy.nxt_incr;
+	capacity = copy.capacity;
+	BUCKETSIZE = copy.BUCKETSIZE;
+	bucketlist = new list <pair<K, V>>[BUCKETSIZE];
+	
+	for (int i = 0; i < BUCKETSIZE; i++)
+	{
+		for (auto list : copy.bucketlist[i]) 
+		{
+			index = setHash(list.first);
+			pair<K, V> str_object_pair = make_pair(list.first, list.second);
+			bucketlist[index].push_back(str_object_pair);
+		}
+	}
+}
+
+template<typename K, typename V>
 inline HashTable<K, V>::~HashTable()
 {
-	delete[] bucketlist;
-	
-	bucketlist = nullptr;
-	BUCKETSIZE = 0;
+	Purge();
 }
 
 template<typename K, typename V>
@@ -126,6 +144,15 @@ inline void HashTable<K, V>::Delete(K key)
 }
 
 template<typename K, typename V>
+inline void HashTable<K, V>::Purge()
+{
+	delete[] bucketlist;
+
+	bucketlist = nullptr;
+	BUCKETSIZE = 0;
+}
+
+template<typename K, typename V>
 inline void HashTable<K, V>::PrintHashTable()
 {
 	if (BUCKETSIZE > 0) {
@@ -159,7 +186,7 @@ inline void HashTable<K, V>::reHash()
 	
 	load_factor = (double)capacity / (double)BUCKETSIZE;
 
-	if (load_factor > 0.5) 
+	if (load_factor >= 0.5) 
 	{
 		list <pair<K, V> >* temp_bkt_list;
 		temp_bkt_list = new list <pair<K, V>>[BUCKETSIZE * 2];

@@ -22,15 +22,12 @@ int main()
 	t.Insert("0763757234", temp3);
 	t.Insert("0763757234", temp2);
 	t.Insert("0763757235", temp2);
-	t.Insert("0763757236", temp2);
+
+	HashTable<string, Book> q(t);
 
 
-	std::cout << t["7063757233"].m_title << std::endl;
-	std::cout << t["7063757233"].m_title << std::endl;
-	std::cout << t["7063757234"].m_title << std::endl;
-	std::cout << t["7063757234"].m_title << std::endl;
 
-
+	q.PrintHashTable();
 	t.PrintHashTable();
 
 	return 0;
