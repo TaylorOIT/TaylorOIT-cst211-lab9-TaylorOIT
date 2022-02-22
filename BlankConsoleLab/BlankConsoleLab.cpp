@@ -38,9 +38,10 @@ bool insert_test();
 bool operator_index_array_test();
 bool operator_index_array_collision_test();
 bool setHash_test();
+bool delete_test();
 
 FunctionPointer test_functions[] = { test_default_ctor,test_one_param_ctor,test_copy_ctor,test_move_ctor,test_op_equal, 
-test_move_op_equal, insert_test, operator_index_array_test, operator_index_array_collision_test, setHash_test };
+test_move_op_equal, insert_test, operator_index_array_test, operator_index_array_collision_test, setHash_test, delete_test };
 
 int main()
 {
@@ -271,5 +272,25 @@ bool setHash_test()
     cout << "setHash Test ";
     return pass;
 }
+
+bool delete_test()
+{
+    bool pass = true;
+    HashTable<string, Book> object(ReturnHashTable());
+
+    cout << "Before deletion: \n";
+    object.PrintHashTable();
+
+    object.Delete("0763757233");
+
+    object.PrintHashTable();
+
+    Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
+
+    cout << "Delete test ";
+    return pass;
+}
+
+
 
 
