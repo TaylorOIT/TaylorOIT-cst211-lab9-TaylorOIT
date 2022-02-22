@@ -2,10 +2,15 @@
 //
 
 #define _CRTDBG_MAP_ALLOC
+typedef bool(*FunctionPointer)();
 
 #include <iostream>
 #include "HashTable.h"
 #include <crtdbg.h>
+
+using std::cout;
+using std::cin;
+using std::endl;
 
 
 HashTable<string, Book> ReturnHashTable()
@@ -23,25 +28,49 @@ HashTable<string, Book> ReturnHashTable()
 	return temptable;
 }
 
+bool test_default_ctor();
+bool test_default_ctor_complex();
+bool test_copy_ctor();
+bool test_copy_ctor_complex();
+bool test_move_ctor();
+bool test_move_ctor_complex();
+bool test_op_equal();
+bool test_op_equal_complex();
+bool test_move_op_equal();
+bool test_move_op_equal_complex();
+
+FunctionPointer test_functions[] = { test_default_ctor };
 
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	
-	HashTable<string, Book> t(10);
+    
+    // Run the test functions
+    for (FunctionPointer func : test_functions)
+    {
+        if (func())
+        {
+            cout << "passed\n";
+        }
+        else
+        {
+            cout << "***** failed *****\n";
+        }
+    }
 
-	Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
-	Book temp1 = { "Rodeo for Dummies", "Calvin Caldwell", 1 };
-	Book temp2 = { "And That n There 2", "Ralph Carestia", 1 };
-	Book temp3 = { "And That n There", "Ralph Carestia", 1 };
-	t.Insert("0763757233", temp);
-	t.Insert("0763757233", temp1);
-	t.Insert("0763757234", temp3);
-	t.Insert("0763757234", temp2);
-	t.Insert("0763757235", temp2);
-
-	t.Traverse(temp);
-
-	return 0;
+    cout << "\nPress Any Key to Exit";
+    cin.get();
 }
 
+bool test_default_ctor()
+{
+    bool pass = true;
+    HashTable<string, Book> object;
+
+
+    if (object.GetBucketSize() != 10 && object.GetNxtIncr() != 0 && object.GetCapacity() != 0)
+        pass = false;
+
+    cout << "Default Ctor Test ";
+    return pass;
+}

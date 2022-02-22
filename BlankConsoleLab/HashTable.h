@@ -4,9 +4,13 @@
 #include <string>
 #include <list>
 #include <iterator>
+#include <cctype>
+#include <iostream>
 using std::string;
 using std::list;
 using std::pair;
+using std::cout;
+using std::endl;
 
 struct Book {
 	string m_title;
@@ -17,21 +21,26 @@ struct Book {
 template <typename K, typename V>
 class HashTable {
 public:
-	HashTable(int value);
+	HashTable(); // default ctor
+	HashTable(int value); // one param ctor
 	HashTable(const HashTable<K, V>& copy); //copy constructor
 	HashTable(HashTable<K, V>&& copy); // move constructor
 	HashTable& operator =(const HashTable<K, V>& rhs); // copy assignment
 	HashTable& operator =(HashTable<K, V>&& rhs); // move assignment
 	~HashTable(); // destructor
 
+	const int GetNxtIncr(); // getter for the nxt_incr variable
+	const int GetCapacity(); // getter for the capacity variable
+	const int GetBucketSize(); // getter for the BUCKETSIZE variable
+
 	int setHash(K key); // returns the element where the list item will be inserted
 	void Insert(K key, V value); // inserts the object into the bucket
 	V operator [](K key); // returns the value depending on the key (operator array index)
 	void Delete(K key); // deletes the list given a key
-	void Purge();
+	void Purge(); // deletes the entire 
 	void Traverse(V value); // traverses the hashtable to find the object value that matches the input and output title, author,
 							// and pages
-	void PrintHashTable(); // prints the entire hash table
+	void PrintHashTable(); // prints the entire hash table. For testing purposes.
 private:
 	list <pair<K, V> > *bucketlist;
 	int BUCKETSIZE; // size of the hash table
@@ -39,6 +48,15 @@ private:
 	int capacity; // total capacity of the hash table. Used in the reHash function.
 	void reHash(); // resizes the hash table depending if the load factor is equal/above 0.5
 };
+
+template<typename K, typename V>
+inline HashTable<K, V>::HashTable()
+{
+	nxt_incr = 0;
+	capacity = 0;
+	this->BUCKETSIZE = 10;
+	bucketlist = new list <pair<K, V>>[BUCKETSIZE];
+}
 
 template<typename K, typename V>
 inline HashTable<K, V>::HashTable(int value) 
@@ -154,18 +172,35 @@ inline HashTable<K, V>::~HashTable()
 }
 
 template<typename K, typename V>
-inline int HashTable<K, V>::setHash(K key)
+inline const int HashTable<K, V>::GetNxtIncr()
 {
+	return nxt_incr;
+}
+
+template<typename K, typename V>
+inline const int HashTable<K, V>::GetCapacity()
+{
+	return capacity;
+}
+
+template<typename K, typename V>
+inline const int HashTable<K, V>::GetBucketSize()
+{
+	return BUCKETSIZE;
+}
+
+template<typename K, typename V>
+inline int HashTable<K, V>::setHash(K key)
+{	
 	int hash = 0; 
 	int index;
-
 	index = key.length();
 
 	for (int i = 0; i < key.length(); i++)
 		hash = hash + (int)key[i];
 
 	index = hash % BUCKETSIZE;
-	
+
 	return index;
 }
 
@@ -211,15 +246,15 @@ inline void HashTable<K, V>::Delete(K key)
 	for (int i = 0; i < BUCKETSIZE; i++) 
 	{
 		if (index == i) {
-			std::cout << "Deleting Element: " << i;
+			cout << "Deleting Element: " << i;
 			for (auto list : bucketlist[i]) {
-				std::cout << " --> " << list.first << ", " << list.second.m_title;
+				cout << " --> " << list.first << ", " << list.second.m_title;
 				--capacity;
 			}
 			bucketlist[i].clear();
 		}
 	}
-	std::cout << std::endl;
+	cout << endl;
 }
 
 template<typename K, typename V>
@@ -239,27 +274,27 @@ inline void HashTable<K, V>::Traverse(V value)
 	for (int i = 0; i < BUCKETSIZE; i++) {
 		for (auto list : bucketlist[i])
 			if (value.m_title == list.second.m_title)
-				std::cout << list.second.m_title << ", " << list.second.m_author << ", " << list.second.m_pages << std::endl;
+				cout << list.second.m_title << ", " << list.second.m_author << ", " << list.second.m_pages << endl;
 	}
-	std::cout << std::endl;
+	cout << endl;
 }
 
 template<typename K, typename V>
 inline void HashTable<K, V>::PrintHashTable()
 {
 	if (BUCKETSIZE > 0) {
-		std::cout << "\nHash Table:\n";
-		std::cout << "------------------------------------\n";
+		cout << "\nHash Table:\n";
+		cout << "------------------------------------\n";
 		for (int i = 0; i < BUCKETSIZE; i++) {
-			std::cout << i;
+			cout << i;
 			for (auto list : bucketlist[i])
-				std::cout << " --> " << list.first << ", " << list.second.m_title;
-			std::cout << std::endl;
+				cout << " --> " << list.first << ", " << list.second.m_title;
+			cout << endl;
 		}
-		std::cout << "------------------------------------\n\n";
+		cout << "------------------------------------\n\n";
 	}
 	else
-		std::cout << "Hash Table is empty.\n";
+		cout << "Hash Table is empty.\n";
 }
 
 template<typename K, typename V>
@@ -295,7 +330,7 @@ inline void HashTable<K, V>::reHash()
 		bucketlist = temp_bkt_list;
 		BUCKETSIZE = BUCKETSIZE * 2;
 
-		std::cout << "Load Factor is above 0.5. Table size is now: " << BUCKETSIZE << std::endl;
+		cout << "Load Factor is above 0.5. Table size is now: " << BUCKETSIZE << endl;
 	}
 }
 
