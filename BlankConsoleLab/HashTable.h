@@ -18,7 +18,7 @@ template <typename K, typename V>
 class HashTable {
 public:
 	HashTable(int value);
-	HashTable(const HashTable<K, V>& copy); // copy constructor
+	HashTable(const HashTable<K, V>& copy); //copy constructor
 	HashTable(HashTable<K, V>&& copy); // move constructor
 	HashTable& operator =(const HashTable<K, V>& rhs); // copy assignment
 	HashTable& operator =(HashTable<K, V>&& rhs); // move assignment
