@@ -36,9 +36,10 @@ bool test_op_equal();
 bool test_move_op_equal();
 bool insert_test();
 bool operator_index_array_test();
+bool operator_index_array_collision_test();
 
 FunctionPointer test_functions[] = { test_default_ctor,test_one_param_ctor,test_copy_ctor,test_move_ctor,test_op_equal, 
-test_move_op_equal, insert_test, operator_index_array_test };
+test_move_op_equal, insert_test, operator_index_array_test, operator_index_array_collision_test };
 
 int main()
 {
@@ -231,6 +232,27 @@ bool operator_index_array_test()
         pass = false;
 
     cout << "Operator Array Index Test ";
+    return pass;
+}
+
+bool operator_index_array_collision_test()
+{
+    bool pass = true;
+
+    HashTable<string, Book> object;
+
+    Book Harry = { "Harry Potter and the Sorcerer's Stone", "J. K. Rowling", 223 };
+    Book Dune = { "Dune", "Frank Herbert", 412 };
+    object.Insert("0-7475-3269-9", Harry);
+    object.Insert("0-7475-3269-9", Dune);
+    
+    if (object["0-7475-3269-9"].m_title != Harry.m_title)
+        pass = false;
+    
+    if (object["0-7475-3269-9"].m_title != Dune.m_title)
+        pass = false;
+    
+    cout << "Operator Array Index Collision Test ";
     return pass;
 }
 
