@@ -39,9 +39,13 @@ bool operator_index_array_test();
 bool operator_index_array_collision_test();
 bool setHash_test();
 bool delete_test();
+bool purge_test();
+bool Traverse_test();
+bool load_factor_test();
 
 FunctionPointer test_functions[] = { test_default_ctor,test_one_param_ctor,test_copy_ctor,test_move_ctor,test_op_equal, 
-test_move_op_equal, insert_test, operator_index_array_test, operator_index_array_collision_test, setHash_test, delete_test };
+test_move_op_equal, insert_test, operator_index_array_test, operator_index_array_collision_test, setHash_test, delete_test, 
+purge_test, Traverse_test, load_factor_test };
 
 int main()
 {
@@ -278,16 +282,72 @@ bool delete_test()
     bool pass = true;
     HashTable<string, Book> object(ReturnHashTable());
 
-    cout << "Before deletion: \n";
+    cout << "\n>> Delete test display below! <<\n";
+    cout << "\nBefore deletion: ";
     object.PrintHashTable();
 
     object.Delete("0763757233");
 
+    cout << "\nAfter deletion: ";
     object.PrintHashTable();
 
     Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
 
     cout << "Delete test ";
+    return pass;
+}
+
+bool purge_test()
+{
+    bool pass = true;
+    HashTable<string, Book> object(ReturnHashTable());
+    
+    cout << "\n>> Purge test display below! <<\n";
+    cout << "\nBefore purge: ";
+    object.PrintHashTable();
+
+    object.Purge();
+
+    cout << "After Purge:\n";
+
+    object.PrintHashTable();
+    
+    cout << "\nPurge Test ";
+
+    return pass;
+}
+
+bool Traverse_test()
+{
+    bool pass = true;
+    HashTable<string, Book> object(ReturnHashTable());
+
+    cout << "\n>> Traverse test display below! <<\n";
+
+    Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
+    object.Traverse(temp);
+
+    cout << "Traverse Test ";
+    return pass;
+}
+
+bool load_factor_test()
+{
+    cout << endl;
+    
+    bool pass = true;
+    HashTable<string, Book> object(4);
+    
+    Book temp = { "C++: Learn by Doing", "Todd Breedlove, Troy Scevers, et. al.", 635 };
+    Book temp1 = { "Rodeo for Dummies", "Calvin Caldwell", 1 };
+
+    object.Insert("0763757233", temp);
+    object.Insert("0763757234", temp1);
+
+    if (object.GetBucketSize() != 8)
+        pass = false;
+
+    cout << "Load Factor Test ";
     return pass;
 }
 

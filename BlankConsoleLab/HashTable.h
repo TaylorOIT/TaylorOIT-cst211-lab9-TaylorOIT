@@ -192,7 +192,7 @@ inline const int HashTable<K, V>::GetBucketSize()
 template<typename K, typename V>
 inline int HashTable<K, V>::setHash(K key)
 {	
-	int hash = 0; 
+	int hash = 0;
 	int index;
 	index = key.length();
 
@@ -219,6 +219,7 @@ inline void HashTable<K, V>::Insert(K key, V value)
 template<typename K, typename V>
 inline V HashTable<K, V>::operator[](K key)
 {
+	
 	int index = setHash(key);
 	for (int i = 0; i < BUCKETSIZE; i++) {
 		auto begin = bucketlist[i].begin();
@@ -232,7 +233,7 @@ inline V HashTable<K, V>::operator[](K key)
 				nxt_incr = 0;
 			return (*nxt).second;
 		}
-		else if (index == i) 
+		else if (index == i)
 		{
 			return (*nxt).second;
 		}
