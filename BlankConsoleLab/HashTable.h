@@ -54,7 +54,7 @@ inline HashTable<K, V>::HashTable()
 {
 	nxt_incr = 0;
 	capacity = 0;
-	this->BUCKETSIZE = 10;
+	this->BUCKETSIZE = 5;
 	bucketlist = new list <pair<K, V>>[BUCKETSIZE];
 }
 

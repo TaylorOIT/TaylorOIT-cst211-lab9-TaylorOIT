@@ -29,6 +29,7 @@ HashTable<string, Book> ReturnHashTable()
 }
 
 bool test_default_ctor();
+bool test_one_param_ctor();
 bool test_default_ctor_complex();
 bool test_copy_ctor();
 bool test_copy_ctor_complex();
@@ -39,7 +40,7 @@ bool test_op_equal_complex();
 bool test_move_op_equal();
 bool test_move_op_equal_complex();
 
-FunctionPointer test_functions[] = { test_default_ctor };
+FunctionPointer test_functions[] = { test_default_ctor, test_one_param_ctor };
 
 int main()
 {
@@ -68,9 +69,36 @@ bool test_default_ctor()
     HashTable<string, Book> object;
 
 
-    if (object.GetBucketSize() != 10 && object.GetNxtIncr() != 0 && object.GetCapacity() != 0)
+    if (object.GetBucketSize() != 5)
+        pass = false;
+
+    if (object.GetCapacity() != 0)
+        pass = false;
+
+    if (object.GetNxtIncr() != 0)
         pass = false;
 
     cout << "Default Ctor Test ";
     return pass;
 }
+
+bool test_one_param_ctor()
+{
+    bool pass = true;
+    HashTable<string, Book> object(50);
+
+
+    if (object.GetBucketSize() != 50)
+        pass = false;
+
+    if (object.GetCapacity() != 0)
+        pass = false;
+
+    if (object.GetNxtIncr() != 0)
+        pass = false;
+
+    cout << "One Parameter Ctor Test ";
+    return pass;
+}
+
+
