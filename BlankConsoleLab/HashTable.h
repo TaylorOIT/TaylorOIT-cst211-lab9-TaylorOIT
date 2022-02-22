@@ -51,20 +51,47 @@ inline HashTable<K, V>::HashTable(int value)
 template<typename K, typename V>
 inline HashTable<K, V>::HashTable(const HashTable<K, V>& copy)
 {
-	int index = 0;
-	nxt_incr = copy.nxt_incr;
-	capacity = copy.capacity;
-	BUCKETSIZE = copy.BUCKETSIZE;
-	bucketlist = new list <pair<K, V>>[BUCKETSIZE];
-	
-	for (int i = 0; i < BUCKETSIZE; i++)
+	if (this != copy) 
 	{
-		for (auto list : copy.bucketlist[i]) 
+		int index = 0;
+		nxt_incr = copy.nxt_incr;
+		capacity = copy.capacity;
+		BUCKETSIZE = copy.BUCKETSIZE;
+		bucketlist = new list <pair<K, V>>[BUCKETSIZE];
+
+		for (int i = 0; i < BUCKETSIZE; i++)
 		{
-			index = setHash(list.first);
-			pair<K, V> str_object_pair = make_pair(list.first, list.second);
-			bucketlist[index].push_back(str_object_pair);
+			for (auto list : copy.bucketlist[i])
+			{
+				index = setHash(list.first);
+				pair<K, V> str_object_pair = make_pair(list.first, list.second);
+				bucketlist[index].push_back(str_object_pair);
+			}
 		}
+	}
+}
+
+template<typename K, typename V>
+inline HashTable<K, V>::HashTable(HashTable<K, V>&& copy)
+{
+	if (this != &copy) {
+		int index = 0;
+		nxt_incr = copy.nxt_incr;
+		capacity = copy.capacity;
+		BUCKETSIZE = copy.BUCKETSIZE;
+		bucketlist = new list <pair<K, V>>[BUCKETSIZE];
+
+		for (int i = 0; i < BUCKETSIZE; i++)
+		{
+			for (auto list : copy.bucketlist[i])
+			{
+				index = setHash(list.first);
+				pair<K, V> str_object_pair = make_pair(list.first, list.second);
+				bucketlist[index].push_back(str_object_pair);
+			}
+		}
+
+		copy.Purge();
 	}
 }
 
@@ -150,6 +177,8 @@ inline void HashTable<K, V>::Purge()
 
 	bucketlist = nullptr;
 	BUCKETSIZE = 0;
+	nxt_incr = 0;
+	capacity = 0;
 }
 
 template<typename K, typename V>
